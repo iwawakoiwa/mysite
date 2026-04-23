@@ -37,6 +37,12 @@ pub fn App() -> Element {
 
     rsx! {
         document::Stylesheet { href: asset!("/assets/boot.css") }
+        document::Link {        
+            rel: "icon",
+            r#type: "image/x-icon",
+            href: asset!("/assets/favicon.ico")  // ← asset!() を追加
+        }
+
         if state() == AppState::Boot {
             BootScreen { on_enter: enter_site }
         }
