@@ -108,7 +108,7 @@ pub fn About() -> Element {
                         }
                         a {
                             class: "link-item",
-                            href: "https://iwaservice.uk",
+                            href: "https://www.iwaservice.uk",
                             target: "_blank",
                             span { class: "link-icon hl-dim", "→ " }
                             span { class: "hl-green", "iwaservice.uk" }

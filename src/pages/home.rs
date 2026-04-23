@@ -1,4 +1,4 @@
-use crate::project_card::RecentProjects;
+use crate::components::RecentProjects;
 use dioxus::prelude::*;
 
 #[component]

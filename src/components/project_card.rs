@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use crate::projects_data::PROJECTS;
+use crate::components::projects_data::PROJECTS;
 
 #[component]
 pub fn RecentProjects() -> Element {
