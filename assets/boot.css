@@ -1,0 +1,501 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Geist+Mono:wght@300;400;600&display=swap');
+
+/* ── Variables ─────────────────────────────────────────── */
+:root {
+  --green:   #a6e3a1;
+  --blue:    #89b4fa;
+  --red:     #f38ba8;
+  --yellow:  #f9e2af;
+  --cyan:    #89dceb;
+  --mauve:   #cba6f7;
+  --white:   #cdd6f4;
+  --dim:     #6c7086;
+  --bg:      #0a0a0f;
+  --surface: #11111b;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+/* ── Boot Screen ────────────────────────────────────────── */
+.boot {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh 12vw;
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.8s ease 0.3s;
+}
+
+.boot.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Arch ロゴ */
+.arch-logo {
+  font-size: clamp(10px, 1.8vw, 18px);
+  color: #1793d1;
+  line-height: 1.15;
+  margin-bottom: 2.5rem;
+  white-space: pre;
+  animation: fadeIn 0.4s ease forwards 0.2s;
+  opacity: 0;
+}
+
+/* ブートログ行 */
+.boot-lines {
+  display: flex;
+  flex-direction: column;
+}
+
+.boot-line {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  line-height: 1.9;
+  font-size: clamp(11px, 1.3vw, 14px);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.boot-line.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.status       { font-weight: 700; min-width: 9ch; }
+.status.ok    { color: var(--green);  }
+.status.wait  { color: var(--blue);   }
+.status.warn  { color: var(--yellow); }
+
+.line-label  { color: var(--dim); }
+.line-detail { color: var(--white); }
+
+/* ログインプロンプト */
+.login-prompt {
+  margin-top: 2rem;
+  font-size: clamp(11px, 1.3vw, 14px);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.login-prompt .host { color: var(--green); }
+.login-prompt .sep  { color: var(--dim);   }
+
+.cursor-blink {
+  display: inline-block;
+  width: 9px;
+  height: 1.1em;
+  background: var(--white);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+/* スキップボタン */
+.skip-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--dim);
+  background: none;
+  border: 1px solid var(--dim);
+  border-radius: 2px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.skip-btn:hover {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+/* ── Site ───────────────────────────────────────────────── */
+.site {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.site.visible { opacity: 1; }
+
+/* scanline */
+.site::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ── Nav ────────────────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  gap: 0;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(137,180,250,0.12);
+  z-index: 10;
+}
+
+.nav-prompt {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 1.5rem;
+}
+
+nav a {
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 0.3rem 0.8rem;
+  border-radius: 3px;
+  transition: color 0.2s, background 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+  color: var(--blue);
+  background: rgba(137,180,250,0.08);
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem max(4rem, 10vw);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -30%; right: -10%;
+  width: 60vw; height: 60vw;
+  background: radial-gradient(circle, rgba(137,180,250,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-tag {
+  font-size: 12px;
+  color: var(--blue);
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+  animation: slideUp 0.5s ease both 0.2s;
+}
+
+.hero-name {
+  font-family: 'Geist Mono', monospace;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  margin-bottom: 0.4rem;
+  animation: slideUp 0.5s ease both 0.35s;
+}
+
+.hero-sub {
+  font-family: 'Geist Mono', monospace;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 300;
+  color: var(--dim);
+  margin-bottom: 2.5rem;
+  animation: slideUp 0.5s ease both 0.5s;
+}
+
+.hero-sub .accent { color: var(--cyan); }
+
+.hero-desc {
+  font-size: 14px;
+  color: var(--dim);
+  line-height: 2;
+  max-width: 55ch;
+  animation: slideUp 0.5s ease both 0.65s;
+}
+
+.hl-green  { color: var(--green);  }
+.hl-yellow { color: var(--yellow); }
+.hl-blue   { color: var(--blue);   }
+
+.tags {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  animation: slideUp 0.5s ease both 0.8s;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+}
+
+.tag.rust  { border-color: var(--red);   color: var(--red);   }
+.tag.esp32 { border-color: var(--green); color: var(--green); }
+.tag.linux { border-color: var(--blue);  color: var(--blue);  }
+.tag.robot { border-color: var(--mauve); color: var(--mauve); }
+.tag.vr    { border-color: var(--cyan);  color: var(--cyan);  }
+
+/* ── Animations ─────────────────────────────────────────── */
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+
+/* ── About ──────────────────────────────────────────────── */
+.about {
+  padding: 4rem max(4rem, 10vw);
+  min-height: 100vh;
+}
+
+.about-header {
+  margin-bottom: 3rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.about-card {
+  border: 1px solid rgba(137,180,250,0.12);
+  border-radius: 4px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.about-card-wide {
+  grid-column: 1 / -1;
+}
+
+.card-title {
+  font-size: 13px;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(137,180,250,0.08);
+  color: var(--dim);
+}
+
+.card-prompt { color: var(--green); }
+
+.card-body {
+  padding: 1.2rem 1rem;
+}
+
+/* whoami rows */
+.about-row {
+  display: flex;
+  gap: 1.5rem;
+  line-height: 2;
+  font-size: 13px;
+}
+
+.about-key {
+  color: var(--dim);
+  min-width: 10ch;
+}
+
+.about-val { color: var(--white); }
+
+/* skills */
+.skill-group {
+  margin-bottom: 1rem;
+}
+
+.skill-label {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.skill-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.skill-chip {
+  font-size: 11px;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+/* links */
+.links-row {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.link-item {
+  text-decoration: none;
+  font-size: 13px;
+  transition: opacity 0.2s;
+}
+
+.link-item:hover { opacity: 0.7; }
+
+/* color helpers */
+.hl-dim    { color: var(--dim);    }
+.hl-red    { color: var(--red);    }
+.hl-green  { color: var(--green);  }
+.hl-blue   { color: var(--blue);   }
+.hl-yellow { color: var(--yellow); }
+.hl-cyan   { color: var(--cyan);   }
+.hl-mauve  { color: var(--mauve);  }
+
+
+/* ── Home 2カラム ───────────────────────────────────────── */
+.home {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  padding: 4rem max(3rem, 8vw);
+}
+
+.home-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* 右カラム */
+.home-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.recent-title {
+  font-size: 12px;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+}
+
+.recent-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* プロジェクトカード */
+.project-card {
+  border: 1px solid rgba(137,180,250,0.12);
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 0.9rem 1rem;
+  transition: border-color 0.2s;
+}
+
+.project-card:hover {
+  border-color: rgba(137,180,250,0.3);
+}
+
+.project-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.project-name {
+  font-size: 13px;
+  color: var(--white);
+  font-weight: 600;
+}
+
+.project-status {
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.status-active { color: var(--green); }
+.status-done   { color: var(--blue);  }
+.status-wip    { color: var(--yellow);}
+
+.project-desc {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.7;
+  margin-bottom: 0.6rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .home {
+    grid-template-columns: 1fr;
+  }
+}
+
+.reboot-btn {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--dim);
+  background: none;
+  border: 1px solid var(--dim);
+  border-radius: 2px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.reboot-btn:hover {
+  color: var(--green);
+  border-color: var(--green);
+}
