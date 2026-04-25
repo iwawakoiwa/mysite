@@ -571,4 +571,18 @@ nav a.active {
   .projects-list {
     padding: 2rem 1.2rem;
   }
+    /* About: 2カラム→1カラム */
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* About: パディング縮小 */
+  .about {
+    padding: 2rem 1.2rem;
+  }
+
+  /* about-card-wide は1カラム時は自動で全幅になるが念のため */
+  .about-card-wide {
+    grid-column: 1;
+  }
 }
