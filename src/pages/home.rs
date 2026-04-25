@@ -29,7 +29,7 @@ pub fn Home() -> Element {
                     span { class: "tag esp32", "ESP32" }
                     span { class: "tag linux", "Arch Linux" }
                     span { class: "tag robot", "Robotics" }
-                    span { class: "tag vr", "VRChat" }
+                    span { class: "tag vr", "VR" }
                 }
             }
 
