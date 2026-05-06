@@ -3,9 +3,10 @@
 
 /* ============================================================
    1. Design Tokens
+   色・背景を変えたいときはここだけ編集する
    ============================================================ */
 :root {
-  /* palette */
+  /* --- Palette --- */
   --green:   #a6e3a1;
   --blue:    #89b4fa;
   --red:     #f38ba8;
@@ -15,9 +16,9 @@
   --white:   #cdd6f4;
   --dim:     #6c7086;
 
-  /* surfaces */
-  --bg:      #0a0a0f;
-  --surface: #11111b;
+  /* --- Surfaces --- */
+  --bg:      #0a0a0f;  /* ページ背景 */
+  --surface: #11111b;  /* カード背景 */
 }
 
 
@@ -27,12 +28,13 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   background: var(--bg);
   color: var(--white);
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
-  overflow: hidden;
+  overflow: hidden; /* スクロールは .site が管理する */
 }
 
 
@@ -40,7 +42,6 @@ html, body {
    3. Boot Screen
    ============================================================ */
 
-/* --- Layout --- */
 .boot {
   position: fixed;
   inset: 0;
@@ -60,18 +61,7 @@ html, body {
   pointer-events: none;
 }
 
-/* --- Arch logo --- */
-.arch-logo {
-  font-size: clamp(10px, 1.8vw, 18px);
-  color: #1793d1;
-  line-height: 1.15;
-  margin-bottom: 2.5rem;
-  white-space: pre;
-  opacity: 0;
-  animation: fadeIn 0.4s ease forwards 0.2s;
-}
-
-/* --- Log lines --- */
+/* ログ行 */
 .boot-lines {
   display: flex;
   flex-direction: column;
@@ -102,7 +92,7 @@ html, body {
 .line-label  { color: var(--dim);   }
 .line-detail { color: var(--white); }
 
-/* --- Login prompt --- */
+/* ログインプロンプト */
 .login-prompt {
   margin-top: 2rem;
   font-size: clamp(11px, 1.3vw, 14px);
@@ -121,7 +111,7 @@ html, body {
   animation: blink 1s step-end infinite;
 }
 
-/* --- Skip button --- */
+/* スキップボタン */
 .skip-btn {
   position: fixed;
   bottom: 2rem;
@@ -142,10 +132,22 @@ html, body {
   border-color: var(--white);
 }
 
+/* Arch ロゴ（未使用・予約） */
+.arch-logo {
+  font-size: clamp(10px, 1.8vw, 18px);
+  color: #1793d1;
+  line-height: 1.15;
+  margin-bottom: 2.5rem;
+  white-space: pre;
+  opacity: 0;
+  animation: fadeIn 0.4s ease forwards 0.2s;
+}
+
 
 /* ============================================================
    4. Site Shell
    ============================================================ */
+
 .site {
   position: fixed;
   inset: 0;
@@ -157,15 +159,15 @@ html, body {
 
 .site.visible { opacity: 1; }
 
-/* scanline overlay */
+/* スキャンラインオーバーレイ */
 .site::before {
   content: '';
   position: fixed;
   inset: 0;
   background: repeating-linear-gradient(
     0deg,
-    transparent,            transparent            2px,
-    rgba(0,0,0,0.03) 2px,  rgba(0,0,0,0.03)       4px
+    transparent,           transparent           2px,
+    rgba(0,0,0,0.03) 2px,  rgba(0,0,0,0.03)      4px
   );
   pointer-events: none;
   z-index: 50;
@@ -173,14 +175,14 @@ html, body {
 
 
 /* ============================================================
-   5. Nav
+   5. Navigation
    ============================================================ */
+
 nav {
   position: sticky;
   top: 0;
   display: flex;
   align-items: center;
-  gap: 0;
   padding: 0.8rem 2rem;
   background: rgba(10,10,15,0.85);
   backdrop-filter: blur(12px);
@@ -194,6 +196,8 @@ nav {
   color: var(--green);
   margin-right: 1.5rem;
 }
+
+.nav-links { display: flex; align-items: center; }
 
 nav a {
   font-size: 13px;
@@ -228,7 +232,7 @@ nav a.active {
   border-color: var(--green);
 }
 
-/* --- Hamburger (mobile only) --- */
+/* ハンバーガーメニュー（モバイルのみ表示） */
 .burger-btn {
   display: none;
   background: none;
@@ -257,42 +261,10 @@ nav a.active {
 
 
 /* ============================================================
-   6. Pages
+   6. Page Layouts
    ============================================================ */
 
-/* --- Home (2-column) --- */
-.home {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 4rem;
-  padding: 4rem max(3rem, 8vw);
-}
-
-.home-left  { display: flex; flex-direction: column; gap: 0; }
-.home-right { display: flex; flex-direction: column; gap: 1rem; }
-
-/* --- Hero (shared) --- */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 4rem max(4rem, 10vw);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  top: -30%; right: -10%;
-  width: 60vw; height: 60vw;
-  background: radial-gradient(circle, rgba(137,180,250,0.04) 0%, transparent 70%);
-  pointer-events: none;
-}
-
+/* --- 共通ヒーロー要素 --- */
 .hero-tag {
   font-size: 12px;
   color: var(--blue);
@@ -328,6 +300,19 @@ nav a.active {
   max-width: 55ch;
   animation: slideUp 0.5s ease both 0.65s;
 }
+
+/* --- Home --- */
+.home {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  padding: 4rem max(3rem, 8vw);
+}
+
+.home-left  { display: flex; flex-direction: column; }
+.home-right { display: flex; flex-direction: column; gap: 1rem; }
 
 /* --- About --- */
 .about {
@@ -372,12 +357,142 @@ nav a.active {
 .about-key { color: var(--dim);   min-width: 10ch; }
 .about-val { color: var(--white); }
 
+/* --- Projects --- */
+.projects-page {
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* --- Project Detail --- */
+.project-detail {
+  min-height: 100vh;
+  padding: 4rem max(4rem, 10vw);
+}
+
+.project-detail-header { margin-bottom: 0.5rem; }
+
+.project-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* --- Post Page --- */
+.post-page {
+  min-height: 100vh;
+  max-width: 900px;
+  padding: 4rem max(4rem, 10vw);
+}
+
+.post-back {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--dim);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: color 0.2s;
+}
+
+.post-back:hover { color: var(--blue); }
+
+.post-header { margin-bottom: 2.5rem; }
+
+.post-meta-date {
+  font-size: 11px;
+  color: var(--dim);
+  margin-top: 0.5rem;
+}
+
+/* Markdownコンテンツ */
+.post-content {
+  font-size: 14px;
+  line-height: 2;
+  color: var(--dim);
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3 {
+  color: var(--blue);
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.post-content h1 { font-size: 1.4rem; }
+.post-content h2 { font-size: 1.2rem; }
+.post-content h3 { font-size: 1rem;   }
+
+.post-content p       { margin-bottom: 1rem; }
+.post-content strong  { color: var(--white); }
+.post-content li      { line-height: 2; }
+
+.post-content a {
+  color: var(--blue);
+  text-decoration: underline;
+}
+
+.post-content ul,
+.post-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-content code {
+  background: var(--surface);
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+  font-size: 0.9em;
+  color: var(--green);
+}
+
+.post-content pre {
+  background: var(--surface);
+  border: 1px solid rgba(137,180,250,0.12);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.post-content pre code {
+  background: none;
+  padding: 0;
+  color: var(--white);
+}
+
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 13px;
+}
+
+.post-content th,
+.post-content td {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(137,180,250,0.15);
+  text-align: left;
+}
+
+.post-content th { color: var(--blue); }
+
 
 /* ============================================================
    7. Components
    ============================================================ */
 
-/* --- Tags (hero) --- */
+/* --- Hero タグ（Homeページ） --- */
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -400,17 +515,11 @@ nav a.active {
 .tag.robot { color: var(--mauve); border-color: var(--mauve); }
 .tag.vr    { color: var(--cyan);  border-color: var(--cyan);  }
 
-/* --- Project card --- */
-.recent-title {
-  font-size: 12px;
-  color: var(--dim);
-  margin-bottom: 0.5rem;
-}
-
-.recent-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+/* --- プロジェクトカード --- */
+.project-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .project-card {
@@ -450,119 +559,20 @@ nav a.active {
 
 .project-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
 
-/* --- Skills (about) --- */
-.skill-group { margin-bottom: 1rem; }
-
-.skill-label {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.4rem;
+/* ホーム右カラム（最近のプロジェクト） */
+.recent-title {
+  font-size: 12px;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
 }
 
-.skill-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-
-.skill-chip {
-  font-size: 11px;
-  padding: 0.2rem 0.6rem;
-  border: 1px solid currentColor;
-  border-radius: 2px;
-  opacity: 0.8;
-}
-
-/* --- Links (about) --- */
-.links-row { display: flex; flex-wrap: wrap; gap: 2rem; }
-
-.link-item {
-  font-size: 13px;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-
-.link-item:hover { opacity: 0.7; }
-
-
-/* ============================================================
-   8. Utilities
-   ============================================================ */
-.hl-dim    { color: var(--dim);    }
-.hl-red    { color: var(--red);    }
-.hl-green  { color: var(--green);  }
-.hl-blue   { color: var(--blue);   }
-.hl-yellow { color: var(--yellow); }
-.hl-cyan   { color: var(--cyan);   }
-.hl-mauve  { color: var(--mauve);  }
-
-
-/* ============================================================
-   9. Responsive
-   ============================================================ */
-@media (max-width: 768px) {
-  .home { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 640px) {
-  .nav-links  { display: none; }
-  .burger-btn { display: block; }
-  .nav-prompt { display: none; }
-
-  nav {
-    padding: 0.6rem 1rem;
-    flex-wrap: wrap;
-    gap: 0.2rem;
-  }
-
-  nav a {
-    font-size: 11px;
-    padding: 0.25rem 0.5rem;
-  }
-
-  .reboot-btn {
-    font-size: 10px;
-    padding: 0.25rem 0.5rem;
-    margin-left: auto;
-  }
-
-  .home {
-    padding: 2rem 1.2rem;
-    gap: 2rem;
-  }
-
-  .hero-name { font-size: clamp(28px, 10vw, 48px); }
-
-  .projects-list { padding: 2rem 1.2rem; }
-
-  .about { padding: 2rem 1.2rem; }
-
-  .about-grid      { grid-template-columns: 1fr; }
-  .about-card-wide { grid-column: 1; }
-}
-
-
-/* ============================================================
-   10. Project Detail & Post Pages
-   ============================================================ */
-
-.project-card-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-}
-
-.project-detail {
-  min-height: 100vh;
-  padding: 4rem max(4rem, 10vw);
-}
-
-.project-detail-header { margin-bottom: 0.5rem; }
-
-.project-detail-meta {
+.recent-cards {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
+/* --- 記事一覧 --- */
 .post-list {
   display: flex;
   flex-direction: column;
@@ -596,113 +606,53 @@ nav a.active {
   color: var(--white);
 }
 
-.post-page {
-  min-height: 100vh;
-  max-width: 900px;
-  padding: 4rem max(4rem, 10vw);
-}
+/* --- スキルチップ（About） --- */
+.skill-group { margin-bottom: 1rem; }
 
-.post-back {
-  display: inline-block;
-  font-size: 12px;
-  color: var(--dim);
-  text-decoration: none;
-  margin-bottom: 2rem;
-  transition: color 0.2s;
-}
-
-.post-back:hover { color: var(--blue); }
-
-.post-header { margin-bottom: 2.5rem; }
-
-.post-meta-date {
+.skill-label {
+  display: block;
   font-size: 11px;
-  color: var(--dim);
-  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
 }
 
-.post-content {
-  font-size: 14px;
-  line-height: 2;
-  color: var(--dim);
-}
+.skill-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
-.post-content h1,
-.post-content h2,
-.post-content h3 {
-  color: var(--blue);
-  margin-top: 2rem;
-  margin-bottom: 0.8rem;
-  font-weight: 600;
-}
-
-.post-content h1 { font-size: 1.4rem; }
-.post-content h2 { font-size: 1.2rem; }
-.post-content h3 { font-size: 1rem; }
-
-.post-content p { margin-bottom: 1rem; }
-
-.post-content code {
-  background: var(--surface);
-  padding: 0.1em 0.4em;
+.skill-chip {
+  font-size: 11px;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid currentColor;
   border-radius: 2px;
-  font-size: 0.9em;
-  color: var(--green);
+  opacity: 0.8;
 }
 
-.post-content pre {
-  background: var(--surface);
-  border: 1px solid rgba(137,180,250,0.12);
-  border-radius: 4px;
-  padding: 1rem;
-  overflow-x: auto;
-  margin-bottom: 1rem;
-}
+/* --- リンク（About） --- */
+.links-row { display: flex; flex-wrap: wrap; gap: 2rem; }
 
-.post-content pre code {
-  background: none;
-  padding: 0;
-  color: var(--white);
-}
-
-.post-content ul,
-.post-content ol {
-  padding-left: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.post-content li { line-height: 2; }
-
-.post-content a {
-  color: var(--blue);
-  text-decoration: underline;
-}
-
-.post-content strong { color: var(--white); }
-
-.post-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
+.link-item {
   font-size: 13px;
+  text-decoration: none;
+  transition: opacity 0.2s;
 }
 
-.post-content th,
-.post-content td {
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(137,180,250,0.15);
-  text-align: left;
-}
+.link-item:hover { opacity: 0.7; }
 
-.post-content th { color: var(--blue); }
-
-@media (max-width: 640px) {
-  .project-detail { padding: 2rem 1.2rem; }
-  .post-page      { padding: 2rem 1.2rem; }
-}
 
 /* ============================================================
-   11. Keyframes
+   8. Utilities
+   テキストに色を付けるヘルパークラス
+   ============================================================ */
+.hl-dim    { color: var(--dim);    }
+.hl-red    { color: var(--red);    }
+.hl-green  { color: var(--green);  }
+.hl-blue   { color: var(--blue);   }
+.hl-yellow { color: var(--yellow); }
+.hl-cyan   { color: var(--cyan);   }
+.hl-mauve  { color: var(--mauve);  }
+
+
+/* ============================================================
+   9. Animations
    ============================================================ */
 @keyframes fadeIn {
   to { opacity: 1; }
@@ -715,4 +665,72 @@ nav a.active {
 
 @keyframes blink {
   50% { opacity: 0; }
+}
+
+
+/* ============================================================
+   10. Responsive
+   すべてのメディアクエリをここにまとめる
+   ============================================================ */
+
+/* タブレット（〜768px） */
+@media (max-width: 768px) {
+  .home { grid-template-columns: 1fr; }
+}
+
+/* スマートフォン（〜640px） */
+@media (max-width: 640px) {
+  /* Nav */
+  nav {
+    padding: 0.6rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+  }
+
+  .nav-links  { display: none; }
+  .nav-prompt { display: none; }
+  .burger-btn { display: block; }
+
+  nav a {
+    font-size: 11px;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .reboot-btn {
+    font-size: 10px;
+    padding: 0.25rem 0.5rem;
+    margin-left: auto;
+  }
+
+  /* Home */
+  .home {
+    padding: 2rem 1.2rem;
+    gap: 2rem;
+  }
+
+  /* 共通ヒーロー */
+  .hero-name { font-size: clamp(28px, 10vw, 48px); }
+
+  /* About */
+  .about { padding: 2rem 1.2rem; }
+
+  .about-grid      { grid-template-columns: 1fr; }
+  .about-card-wide { grid-column: 1; }
+
+  .about-row {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(137,180,250,0.06);
+  }
+
+  .about-row:last-child { border-bottom: none; }
+
+  .about-key { min-width: unset; font-size: 11px; }
+  .about-val { font-size: 13px;  overflow-wrap: break-word; }
+
+  /* Projects / Project Detail / Post */
+  .projects-page  { padding: 2rem 1.2rem; }
+  .project-detail { padding: 2rem 1.2rem; }
+  .post-page      { padding: 2rem 1.2rem; }
 }
