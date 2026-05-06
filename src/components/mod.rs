@@ -2,7 +2,8 @@
 mod boot;
 mod header;
 mod project_card;
-pub mod projects_data; 
+pub mod projects_data;
+pub mod posts_data;
 
 pub use boot::BootScreen;
 pub use header::Header;

@@ -14,6 +14,7 @@ pub fn Projects() -> Element {
                 for project in PROJECTS.iter() {
                     ProjectCard {
                         name: project.name,
+                        slug: project.slug,
                         desc: project.desc,
                         tags: project.tags.to_vec(),
                         status: project.status,

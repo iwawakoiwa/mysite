@@ -1,7 +1,7 @@
 // src/app.rs
 use dioxus::prelude::*;
 use crate::components::{BootScreen, Header};
-use crate::pages::{Home, About, Projects};
+use crate::pages::{Home, About, Projects, ProjectDetail, PostPage};
 
 #[derive(Clone, PartialEq)]
 pub enum AppState {
@@ -16,6 +16,10 @@ pub enum Route {
     Home {},
     #[route("/projects")]
     Projects {},
+    #[route("/projects/:slug")]
+    ProjectDetail { slug: String },
+    #[route("/projects/:slug/:post_slug")]
+    PostPage { slug: String, post_slug: String },
     #[route("/about")]
     About {},
 }
@@ -37,10 +41,10 @@ pub fn App() -> Element {
 
     rsx! {
         document::Stylesheet { href: asset!("/assets/boot.css") }
-        document::Link {        
+        document::Link {
             rel: "icon",
             r#type: "image/x-icon",
-            href: asset!("/assets/favicon.ico")  // ← asset!() を追加
+            href: asset!("/assets/favicon.ico")
         }
 
         if state() == AppState::Boot {
